@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  webapp:
+    build:
+      context: ./webapp   # path to webapp directory containing its Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"       # expose your frontend on localhost:3000
+    depends_on:
+      - api
+    environment:
+      - VITE_API_URL=http://api:5000   # example env for frontend to reach API inside docker network
+
+  api:
+    build:
+      context: ./api      # path to api directory containing its Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"       # expose API on localhost:5000
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - CONNECTION_STRING=Server=db;Database=mydb;User Id=sa;Password=Your_password123;
+
+  db:
+    # Going with SQL Server for the database.
+    image: 
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
