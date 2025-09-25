@@ -19,6 +19,7 @@ export function useWeatherService() {
         authorizationParams: { audience: AUDIENCE }
       });
 
+      
       if (token.split(".").length !== 3) {
         throw new Error("Expected a 3-part JWT access token");
       }
