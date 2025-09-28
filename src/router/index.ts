@@ -9,6 +9,12 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
+    {
+      path: '/add-recipe',
+      name: 'add-recipe',
+      // route level code-splitting
+      component: () => import('../components/AddRecipe.vue')
+    }
   ],
 })
 

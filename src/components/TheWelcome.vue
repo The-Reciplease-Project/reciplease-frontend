@@ -23,7 +23,8 @@ async function onGetWeather() {
   }
 }
 
-import { useUserInfo, type UserInfo } from '@/services/userinfo.service'
+import { useUserInfo } from '@/services/userinfo.service'
+import type { UserInfo } from '@/types/user';
 
 const { getUserInfo } = useUserInfo();
 const me = ref<UserInfo | null>(null);

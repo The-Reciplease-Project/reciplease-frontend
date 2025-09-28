@@ -1,20 +1,8 @@
 // src/services/userinfo.service.ts
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-vue";
+import type { UserInfo, RateLimit } from '../types/user';
 
-export type UserInfo = {
-  sub: string;
-  email?: string;
-  email_verified?: boolean;
-  name?: string;
-  [k: string]: unknown;
-};
-
-export type RateLimit = {
-  limit?: number;
-  remaining?: number;
-  reset?: number; // UTC epoch seconds
-};
 
 export function useUserInfo() {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
