@@ -11,6 +11,7 @@
         <button @click="addIngredient">Add Ingredient</button>
         
         <!-- aDD UL-->
+         <!-- Is there any way we can introduce event delegation here with the Remove Ingredient button?-->
          <ul v-if="ingredients.length" >
             <li v-for="(ing, i) in ingredients" :key="i" >
                 {{  ing  }}
