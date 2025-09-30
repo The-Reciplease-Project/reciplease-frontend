@@ -1,27 +1,16 @@
 <template>
-    <div>
-        <label>
-            <span>Recipe Name</span>
-
-        </label>
-
-    </div>
+   <label>
+        <span>Recipe Name</span>
+        <input 
+        :value="modelValue" 
+        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" 
+        placeholder="Enter recipe name" />
+    </label>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
+<script setup lang="ts">
 defineProps<{ modelValue: string }>(); // Props are send to the child component
-defineEmits<{ (e: 'update:model', value: string): void }>();
-
-
-
-export default defineComponent({
-    setup () {
-        
-
-        return {}
-    }
-})
+defineEmits<{ (e: 'update:modelValue', value: string): void }>();
+defineEmits
 </script>
 

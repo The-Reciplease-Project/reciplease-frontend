@@ -12,6 +12,7 @@
         
         <!-- aDD UL-->
          <!-- Is there any way we can introduce event delegation here with the Remove Ingredient button?-->
+          <!-- Need to know which child element was interacted with using event.target-->
          <ul v-if="ingredients.length" >
             <li v-for="(ing, i) in ingredients" :key="i" >
                 {{  ing  }}
