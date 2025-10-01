@@ -8,7 +8,7 @@
 
     <section>
         <h3> Ingredients </h3>
-        <IngredientInput @add="addIngredient" :disabledProp="isSubmitting" />"
+        <IngredientInput @add="addIngredient" />"
         <IngredientList :items="ingredients" @remove="removeIngredient" />
     </section>
 

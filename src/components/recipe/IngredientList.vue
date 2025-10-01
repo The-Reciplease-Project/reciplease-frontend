@@ -1,14 +1,13 @@
 <template>
     <div>
-        <ul v-if="items.length">
+        <ul v-if="props.items.length">
             <li v-for="(ingredient, index) in items" :key:index>
                 {{ ingredient  }}
 
                 <button 
                 type="button"
                 aria-label="Remove Ingredient"
-                data-action="remove"
-                :data-index="index">
+                @click="emit('remove', index)">
                 Remove Ingredient
                 </button>
             </li>
