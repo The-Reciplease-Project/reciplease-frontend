@@ -1,27 +1,18 @@
 // src/services/recipe.service.ts
-import axios from "axios";
-import { useAuth0 } from "@auth0/auth0-vue";
-import type { Recipe, CreateRecipeDto } from "../types/recipe";
+import { useAuth0 } from '@auth0/auth0-vue'
+import { AxiosRecipeApi } from './recipeApi.axios'
+import { createFetchRecipeApi } from './recipeApi.fetch'
+import type { RecipeApi } from './recipeApi.types'
 
-const API_BASE = import.meta.env.VITE_API_SERVER_URL as string;
+export function useRecipeApi(): RecipeApi {
+  const { getAccessTokenSilently } = useAuth0() // ✅ inside setup
+  const tokenProvider = () =>
+    getAccessTokenSilently({
+      authorizationParams: { audience: import.meta.env.VITE_AUTH0_AUDIENCE },
+    })
 
-export function useRecipeApi() {
-  const { getAccessTokenSilently } = useAuth0();
-
-  async function createRecipe(dto: CreateRecipeDto): Promise<Recipe> {
-    // get a valid API token
-    const token = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-      },
-    });
-
-    const res = await axios.post<Recipe>(`${API_BASE}/recipes`, dto, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    return res.data;
-  }
-
-  return { createRecipe };
+  const client = import.meta.env.VITE_API_CLIENT ?? 'axios'
+  return client === 'axios'
+    ? new AxiosRecipeApi(tokenProvider)
+    : createFetchRecipeApi(tokenProvider)
 }

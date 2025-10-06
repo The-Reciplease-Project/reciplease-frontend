@@ -29,8 +29,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Recipe } from '@/types/recipe';
-import { useRecipeApi } from '@/services/recipe.service';
-const { createRecipe } = useRecipeApi();
+import { useRecipeApi } from '@/services/recipe.service'
+const api = useRecipeApi();
 
 const recipe = ref<Recipe>({
   name: '',
@@ -59,16 +59,10 @@ async function submitRecipe() {
       name: recipe.value.name,
       ingredients: ingredients.value,
     }
-    const saved = await createRecipe(dto)
+    const saved = await api.createRecipe(dto)
     console.log('Saved recipe:', saved)
   } catch (err) {
     console.error('Failed to create recipe', err)
   }
 }
-
-
 </script>
-
-<style lang="scss" scoped>
-
-</style>

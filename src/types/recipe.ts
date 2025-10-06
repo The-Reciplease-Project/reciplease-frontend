@@ -1,4 +1,4 @@
-export interface Recipe {
+export type Recipe = {
   name: string
   ingredients: Ingredient[]
   cookwares?: Cookware[]
@@ -7,44 +7,44 @@ export interface Recipe {
   steps: Step[]
 }
 
-export interface Ingredient {
+export type Ingredient = {
   name: string
   quantity: number
   unit?: string // e.g., "g", "cup", "tbsp"
   // Potentially add: alternatives?: Ingredient[]
 }
 
-export interface Cookware {
+export type Cookware = {
   name: string
   size?: string // e.g., "10 in", "3 qt"
   // Potentially add: alternatives?: Cookware[]
 }
 
-export interface Appliance {
+export type Appliance = {
   name: string
   // Potentially add: alternatives?: Appliance[]
 }
 
-export interface Utensil {
+export type Utensil = {
   name: string
   // Placeholder for utensil details if needed later
 }
 
-export interface Step {
+export type Step = {
   id: number
   description: string
   estimatedTime: number
   subSteps: SubStep[]
 }
 
-export interface SubStep {
+export type SubStep = {
   description: string
   time: number
   // Consider making time a duration type (e.g., ISO 8601) if not plain int
 }
 
 // request
-export interface CreateRecipeDto {
+export type CreateRecipeDto = {
   name: string
   ingredients: string[]
 }
