@@ -1,0 +1,7 @@
+.ingredient-picker {
+    display: grid;
+    max-height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid black
+}

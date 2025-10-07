@@ -15,5 +15,13 @@ export class AxiosRecipeApi implements RecipeApi {
     })
     return res.data
   }
+
+  async getIngredients(): Promise<string[]> {
+    const token = await this.getToken()
+    const res = await this.http.get<any[]>(`${API_BASE}/ingredients`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    return res.data
+  }
 }
 
