@@ -12,21 +12,8 @@ const router = createRouter({
     {
       path: '/add-recipe',
       name: 'add-recipe',
-      // route level code-splitting
-      component: () => import('../components/AddRecipe.vue')
+      component: () => import('../components/CreateRecipe.vue')
     },
-    {
-      path: '/yessir',
-      name: 'yessir',
-      // route level code-splitting
-      component: () => import('../components/Yessir.vue')
-    },
-    {
-      path: '/components',
-      name: 'components',
-      // route level code-splitting
-      component: () => import('../components/recipe/IngredientSelect.vue')
-    }
   ],
 })
 

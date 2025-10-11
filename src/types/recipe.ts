@@ -1,17 +1,23 @@
 export type Recipe = {
   name: string
-  ingredients: Ingredient[]
+  ingredients: IngredientExport[]
   cookwares?: Cookware[]
   utensils?: Utensil[]
   appliances?: Appliance[]
   steps: Step[]
 }
 
-export type Ingredient = {
+
+export type IngredientImport = {
+  id: string,
   name: string
-  quantity: number
+}
+
+export type IngredientExport = {
+  id: string
+  name: string
+  quantity?: number
   unit?: string // e.g., "g", "cup", "tbsp"
-  // Potentially add: alternatives?: Ingredient[]
 }
 
 export type Cookware = {
@@ -43,8 +49,4 @@ export type SubStep = {
   // Consider making time a duration type (e.g., ISO 8601) if not plain int
 }
 
-// request
-export type CreateRecipeDto = {
-  name: string
-  ingredients: string[]
-}
+

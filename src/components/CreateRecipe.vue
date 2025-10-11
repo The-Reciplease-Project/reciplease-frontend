@@ -1,43 +1,40 @@
 <template>
     <form @submit.prevent="submitRecipe">
         <RecipeNameField 
-        :modelValue="name"
-        @update:model-value="val => name = val"
+        @update:model-value="childRecipeName => recipeName = childRecipeName"
         />
     </form>
 
     <section>
         <h3> Ingredients </h3>
-        <IngredientInput @add="addIngredient" />"
+        <IngredientSelect @addIngredient="addIngredient"/>
         <IngredientList :items="ingredients" @remove="removeIngredient" />
     </section>
 
-    <button :disabled="isSubmitting"> Save Recipe </button>
+    <button @click="submitRecipe" :disabled="isSubmitting"> Save Recipe </button>
     
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import RecipeNameField from './RecipeNameField.vue'
-import IngredientInput from './IngredientInput.vue';
-import IngredientList from './IngredientList.vue';
+import RecipeNameField from './recipe/RecipeNameField.vue';
+import IngredientList from '../components/recipe/IngredientList.vue';
+import IngredientSelect from '../components/recipe/IngredientSelect.vue';
 import { useRecipeApi } from '@/services/recipe.service';
 import { useIngredients } from '@/composables/useIngredients';
 const { createRecipe } = useRecipeApi();
+import { ref } from 'vue';
 
-const name = ref<string>('');
+const recipeName = ref<string>('');
 const isSubmitting = ref<boolean>(false); // This will be passed down to child IngredientInput.vue component
 const { items: ingredients, add: addIngredient, removeAt: removeIngredient, clear } = useIngredients();
 
 async function submitRecipe() {
-  if (!name.value.trim()) return
+  if (!recipeName.value.trim()) return
   isSubmitting.value = true
   try {
-    const dto = { name: name.value.trim(), ingredients: ingredients.value }
+    const dto = { name: recipeName.value.trim(), ingredients: ingredients.value }
     const saved = await createRecipe(dto)
-    console.log('Saved recipe:', saved)
-    // optional: reset after save
-    name.value = ''
+    recipeName.value = ''
     clear()
   } catch (err) {
     console.error('Failed to create recipe', err)
@@ -45,4 +42,5 @@ async function submitRecipe() {
     isSubmitting.value = false
   }
 }
+
 </script>

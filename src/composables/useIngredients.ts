@@ -1,12 +1,12 @@
 import { ref }  from 'vue';
+import type { IngredientImport, IngredientExport } from '@/types/recipe';
 
 export function useIngredients(){
-    const items = ref<string[]>([]);
+    const items = ref<IngredientExport[]>([]);
 
-    function add(item: string){
-        const trimmed = item.trim();
-        if(trimmed && !items.value.includes(trimmed)){
-            items.value.push(trimmed);
+    function add(item: IngredientExport){
+        if(item && !items.value.includes(item)){
+            items.value.push(item);
         }
     }
 
@@ -25,6 +25,4 @@ export function useIngredients(){
         removeAt,
         clear
     }
-
-    
 }
