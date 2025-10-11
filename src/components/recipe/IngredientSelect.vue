@@ -1,5 +1,5 @@
 <template>
-  <input placeholder="Search ingredients..." @click="openIngredientPicker = !openIngredientPicker"></input>
+  <input placeholder="Search ingredients..." @click="openIngredientPicker = !openIngredientPicker" v-model="searchTerm"></input>
   <div
   class="ingredient-picker"
   v-if="openIngredientPicker"
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import '@/assets/recipeadder.css';
 import { useAuth0 } from '@auth0/auth0-vue';
@@ -38,6 +38,13 @@ const API_BASE = import.meta.env.VITE_API_SERVER_URL;
 const API_AUDIENCE = import.meta.env.VITE_AUTH0_AUDIENCE;
 
 const page = ref<number>(1);
+const searchTerm = ref<string>('');
+
+watch(searchTerm, () => {
+  page.value = 1;
+  availableIngredients.value = [];
+  loadIngredients();
+})
 
 onMounted(() => {
   loadIngredients();
@@ -62,8 +69,11 @@ async function loadIngredients(
     if (page.value === 1) {
       // first page, just load
       const { data } = await axios.get<IngredientImport[]>(
-        `${API_BASE}/ingredients?page=${page.value}`,
-        { headers: { Authorization: token ? `Bearer ${token}` : undefined } }
+  `${API_BASE}/ingredients`,
+  {
+    params: { q: searchTerm.value, page: page.value },     // ✅ let axios encode it
+    headers: { Authorization: token ? `Bearer ${token}` : undefined },
+  }
       );
       availableIngredients.value.push(...data);
       page.value += 1;
@@ -77,13 +87,16 @@ async function loadIngredients(
       if (!nearBottom) return;
 
       const { data } = await axios.get<IngredientImport[]>(
-        `${API_BASE}/ingredients?page=${page.value}`,
-        { headers: { Authorization: token ? `Bearer ${token}` : undefined } }
-      );
+  `${API_BASE}/ingredients`,
+  {
+    params: { q: searchTerm.value, page: page.value },     // ✅ let axios encode it
+    headers: { Authorization: token ? `Bearer ${token}` : undefined },
+  }
+)
+
 
         availableIngredients.value.push(...data);
         page.value += 1;
-      
     }
   } catch (e) {
     console.error('Error fetching ingredients:', e);
