@@ -1,5 +1,5 @@
 <template>
-  <input placeholder="Search ingredients..." @click="openIngredientPicker = !openIngredientPicker" v-model="searchTerm"></input>
+  <input ref="myInput" placeholder="Search ingredients..." v-model="searchTerm"></input>
   <div
   class="ingredient-picker"
   v-if="openIngredientPicker"
@@ -13,7 +13,9 @@
     <li
       v-for="(ingredient, i) in availableIngredients"
       :key="i"
-      @click="emit('addIngredient', selectedIngredient = { id: ingredient.id, name: ingredient.name })"
+      @click="emit('addIngredient', selectedIngredient = { id: ingredient.id, name: ingredient.name }) ; setInputFocus()" 
+      class="list"
+      :class="{ 'selected-ingredients': props.selectedIds.has(ingredient.id) }"
     >
       {{ ingredient.name }} {{ ingredient.id }}
     </li>
@@ -27,20 +29,38 @@ import axios from 'axios';
 import '@/assets/recipeadder.css';
 import { useAuth0 } from '@auth0/auth0-vue';
 import type { IngredientExport, IngredientImport } from '@/types/recipe';
-
+import { useIngredients } from '@/composables/useIngredients';
+const { ids } = useIngredients();
 const selectedIngredient = ref<IngredientExport | null>(null);
 const availableIngredients = ref<IngredientImport[]>([]);
 const openIngredientPicker = ref<boolean>(false);
 const { getAccessTokenSilently, isAuthenticated } = useAuth0();
-const emit = defineEmits<{(event: 'addIngredient', value: IngredientExport): void}>();
 
+const myInput = ref<HTMLInputElement | null>(null);
+const emit = defineEmits<{(event: 'addIngredient', value: IngredientExport): void}>();
+const props = defineProps<{selectedIds: Set<string>}>()
 const API_BASE = import.meta.env.VITE_API_SERVER_URL;
 const API_AUDIENCE = import.meta.env.VITE_AUTH0_AUDIENCE;
 
 const page = ref<number>(1);
 const searchTerm = ref<string>('');
 
+function setInputFocus() {
+  myInput.value?.focus();
+}
+
+function toggleIngredientPicker() {
+  if(searchTerm.value === ''){
+    openIngredientPicker.value = false;
+  }
+  else {
+    openIngredientPicker.value = true;
+  }
+}
+
+
 watch(searchTerm, () => {
+  toggleIngredientPicker();
   page.value = 1;
   availableIngredients.value = [];
   loadIngredients();

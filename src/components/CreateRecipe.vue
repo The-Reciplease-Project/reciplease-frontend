@@ -7,7 +7,11 @@
 
     <section>
         <h3> Ingredients </h3>
-        <IngredientSelect @addIngredient="addIngredient"/>
+        <IngredientSelect 
+        @addIngredient="addIngredient"
+        :selectedIds="selectedIds"
+        />
+
         <IngredientList :items="ingredients" @remove="removeIngredient" />
     </section>
 
@@ -22,11 +26,13 @@ import IngredientSelect from '../components/recipe/IngredientSelect.vue';
 import { useRecipeApi } from '@/services/recipe.service';
 import { useIngredients } from '@/composables/useIngredients';
 const { createRecipe } = useRecipeApi();
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const recipeName = ref<string>('');
 const isSubmitting = ref<boolean>(false); // This will be passed down to child IngredientInput.vue component
 const { items: ingredients, add: addIngredient, removeAt: removeIngredient, clear } = useIngredients();
+
+const selectedIds = computed(() => new Set(ingredients.value.map(i => i.id)));
 
 async function submitRecipe() {
   if (!recipeName.value.trim()) return

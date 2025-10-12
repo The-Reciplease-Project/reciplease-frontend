@@ -5,3 +5,12 @@
     overflow-x: hidden;
     border: 1px solid black
 }
+
+.list {
+    border: 1px solid black;
+}
+
+.selected-ingredients {
+    background-color: lime;
+    color: tomato;
+}
