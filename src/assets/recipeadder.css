@@ -1,4 +1,4 @@
-.ingredient-picker {
+.item-picker {
     display: grid;
     max-height: 150px;
     overflow-y: auto;

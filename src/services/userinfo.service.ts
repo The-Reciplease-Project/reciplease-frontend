@@ -22,7 +22,6 @@ export function useUserInfo() {
       detailedResponse: true,
       authorizationParams: {
         scope: "openid profile email",
-        // audience: undefined // uncomment if you globally set an audience and /userinfo 401s
       },
     }) as any;
 

@@ -28,7 +28,7 @@ import '@/assets/recipeadder.css';
 import { useAuth0 } from '@auth0/auth0-vue';
 import type { IngredientExport, IngredientImport } from '@/types/recipe';
 
-const searchItem = ref<string>('ingredients');
+const searchItem = ref<string>('utensils');
 
 const selectedIngredient = ref<IngredientExport | null>(null);
 const availableIngredients = ref<IngredientImport[]>([]);

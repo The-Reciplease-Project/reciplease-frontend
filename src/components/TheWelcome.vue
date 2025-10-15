@@ -4,6 +4,7 @@ import { useAuth0 } from '@auth0/auth0-vue'
 import LoginButton from './home/LoginButton.vue'
 import SignupButton from './home/SignupButton.vue'
 import LogoutButton from './home/LogoutButton.vue'
+import CreateRecipe from './CreateRecipe.vue'
 import { ref } from "vue";
 
 const { isAuthenticated, isLoading } = useAuth0()
@@ -37,15 +38,9 @@ async function loadMe() {
   <div v-if="!isLoading" class="mb-4 flex gap-2">
     <template v-if="isAuthenticated">
       <LogoutButton />
-
-
-      <div>
-          <button @click="loadMe">Load /userinfo</button>
-          <pre v-if="me">{{ me }}</pre>
-          <pre v-if="rate">Rate limit: {{ rate }}</pre>
-          <p v-if="err" style="color:red">{{ err }}</p>
-      </div>
-
+      <RouterLink to="/add-recipe">
+        <button class="thing" >Create Recipe</button>
+      </RouterLink>
     </template>
   
     <template v-else>
@@ -54,3 +49,9 @@ async function loadMe() {
     </template>
   </div>
 </template>
+
+<style scoped>
+.thing{
+  display: block;
+}
+</style>

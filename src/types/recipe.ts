@@ -1,12 +1,14 @@
 export type Recipe = {
   name: string
   ingredients: IngredientExport[]
-  cookwares?: Cookware[]
-  utensils?: Utensil[]
-  appliances?: Appliance[]
-  steps: Step[]
 }
 
+export type RecipeStep = {
+  id: number
+  description: string
+  estimatedTime: number // in minutes
+  subSteps: SubStep[]
+}
 
 export type IngredientImport = {
   id: string,
