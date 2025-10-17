@@ -3,11 +3,12 @@ export type Recipe = {
   ingredients: IngredientExport[]
 }
 
-export type RecipeStep = {
-  id: number
-  description: string
-  estimatedTime: number // in minutes
-  subSteps: SubStep[]
+export type RecipeStepExport = {
+  id?: string  
+  description: string;
+  startTime: number | null;
+  endTime: number | null;
+  recipe: number
 }
 
 export type IngredientImport = {
@@ -20,6 +21,10 @@ export type IngredientExport = {
   name: string
   quantity?: number
   unit?: string // e.g., "g", "cup", "tbsp"
+}
+
+export type StepImport = {
+
 }
 
 export type Cookware = {
@@ -38,12 +43,7 @@ export type Utensil = {
   // Placeholder for utensil details if needed later
 }
 
-export type Step = {
-  id: number
-  description: string
-  estimatedTime: number
-  subSteps: SubStep[]
-}
+
 
 export type SubStep = {
   description: string

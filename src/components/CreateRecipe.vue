@@ -5,84 +5,60 @@
         />
     </form>
 
-    <RecipeSteps />
-
     <section>
+      <h3 class="thing">Ingredients</h3>
+      <div class="thing">
+        <IngredientSelect @addIngredient="addIngredient" :selectedIds="selectedIds" />
+      </div>
+      <div class="thing">
+        <IngredientList :items="ingredients" @remove="removeIngredient" />
+      </div>
 
-        <h3 class="thing">Ingredients</h3>
-<div class="thing">
-  <IngredientSelect @addIngredient="addIngredient" :selectedIds="selectedIds" />
-</div>
-<div class="thing">
-  <IngredientList :items="ingredients" @remove="removeIngredient" />
-</div>
+      <RecipeTimer 
+      :time="time" 
+      @startedTimer="startTimer"
+      @stoppedTimer="stopTimer"
+      @resetTimer="resetTimer" />
 
-<h3 class="thing" > Cookware </h3>
-
-<div class="thing">
-  <CookwareSelect @addIngredient="addIngredient" :selectedIds="selectedIds" />
-</div>
-
-<div class="thing">
-  <CookwareList :items="ingredients" @remove="removeIngredient" />
-</div>
-
-<h3 class="thing" > Utensils </h3>
-
-<div class="thing">
-  <UtensilSelect @addIngredient="addIngredient" :selectedIds="selectedIds" />
-</div>
-
-<div class="thing">
-  <UtensilList :items="ingredients" @remove="removeIngredient" />
-</div>
-
-<h3 class="thing" > Appliances </h3>
-
-<div class="thing">
-  <ApplianceSelect @addIngredient="addIngredient" :selectedIds="selectedIds" />
-</div>
-
-<div class="thing">
-  <ApplianceList :items="ingredients" @remove="removeIngredient" />
-</div>
-
-
-
+      <RecipeSteps
+      :steps="steps"
+      :time="time"
+      @started-step="(i) => startStep(i,time)"
+      @ended-step="(i) => endStep(i,time)"
+      @added-step="() => addStep()"
+      />
     </section>
-
     <button class="thing" @click="submitRecipe" :disabled="isSubmitting"> Save Recipe </button>
-    
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue';
+import '@/assets/main.css';
 import RecipeNameField from './recipe/RecipeNameField.vue';
 import IngredientList from '../components/recipe/IngredientList.vue';
 import IngredientSelect from '../components/recipe/IngredientSelect.vue';
-import CookwareSelect  from '../components/recipe/CookwareSelect.vue';
-import CookwareList from '../components/recipe/CookwareList.vue';
-import UtensilSelect  from '../components/recipe/UtensilSelect.vue';
-import UtensilList from '../components/recipe/UtensilList.vue';
-import ApplianceSelect  from '../components/recipe/ApplianceSelect.vue';
-import ApplianceList from '../components/recipe/ApplianceList.vue';
 import RecipeSteps from '../components/recipe/RecipeSteps.vue';
 import { useIngredients } from '@/composables/useIngredients';
 import { useRecipeService } from '@/services/recipe.service';
-const { createRecipe } = useRecipeService();
-import { ref, computed } from 'vue';
-import '@/assets/main.css';
+import RecipeTimer from '../components/recipe/RecipeTimer.vue';
+import { useTimer} from '@/composables/useTimer';
+import { useIngredientSteps } from '@/composables/useIngredientSteps';
 
+const { time, startTimer, stopTimer, resetTimer } = useTimer();
+const { addStep, steps, startStep, endStep } = useIngredientSteps();
+const { createRecipe } = useRecipeService();
 const recipeName = ref<string>('');
 const isSubmitting = ref<boolean>(false);
 const { items: ingredients, add: addIngredient, removeAt: removeIngredient, clear } = useIngredients();
-
 const selectedIds = computed(() => new Set(ingredients.value.map(i => i.id)));
 
+defineEmits<({ event: 'timerStarted', time: number })>();
+
 async function submitRecipe() {
-  if (!recipeName.value.trim()) return
+  if (!recipeName.value.trim()) return 
   isSubmitting.value = true
   try {
-    const dto = { name: recipeName.value.trim(), ingredients: ingredients.value }
+    const dto = { name: recipeName.value.trim(), ingredients: ingredients.value, steps: steps.value }
     const saved = await createRecipe(dto)
     recipeName.value = ''
     clear()
@@ -92,7 +68,6 @@ async function submitRecipe() {
     isSubmitting.value = false
   }
 }
-
 </script>
 
 <style scoped>

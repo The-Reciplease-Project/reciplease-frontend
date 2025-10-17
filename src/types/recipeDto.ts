@@ -1,8 +1,9 @@
+import type { IngredientExport, StepExport} from "./recipe";
+
 export type CreateRecipeDto = {
-  name: string
-  ingredients: Array<{
-    ingredientId: string;   // GUID string
-    quantity?: number;      // maps to decimal?
-    unit?: string;
-  }>
+    name: string;
+    ingredients: IngredientExport[];
+    steps: StepExport[];
 }
+
+
