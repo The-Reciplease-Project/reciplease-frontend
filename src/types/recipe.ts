@@ -23,6 +23,28 @@ export type IngredientExport = {
   unit?: string // e.g., "g", "cup", "tbsp"
 }
 
+export type CookwareImport = {
+  id: string,
+  name: string,
+  size: number,
+}
+
+export type CookwareExport = {
+  id: string,
+  name: string,
+  size: number,
+}
+
+export type ApplianceImport = {
+  id: string,
+  name: string
+}
+
+export type ApplianceExport = {
+  id: string,
+  name: string
+}
+
 export type StepImport = {
 
 }

@@ -14,6 +14,11 @@
         <IngredientList :items="ingredients" @remove="removeIngredient" />
       </div>
 
+      <RecipeItemSelect
+      category-were-searching-in="ingredients"
+      :selectedIds="selectedIds"
+      />
+
       <RecipeTimer 
       :time="time" 
       @startedTimer="startTimer"
@@ -38,6 +43,7 @@ import RecipeNameField from './recipe/RecipeNameField.vue';
 import IngredientList from '../components/recipe/IngredientList.vue';
 import IngredientSelect from '../components/recipe/IngredientSelect.vue';
 import RecipeSteps from '../components/recipe/RecipeSteps.vue';
+import RecipeItemSelect from './recipe/RecipeItemSelect.vue';
 import { useIngredients } from '@/composables/useIngredients';
 import { useRecipeService } from '@/services/recipe.service';
 import RecipeTimer from '../components/recipe/RecipeTimer.vue';

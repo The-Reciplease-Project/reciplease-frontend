@@ -1,7 +1,7 @@
 <template>
 <input
   ref="myInput"
-  :placeholder="`Search ${searchItem}...`"
+  :placeholder="`Search ${categoryWereSearchingIn}...`"
   v-model="searchTerm"
 />
   <div class="item-picker"
@@ -28,7 +28,7 @@ import '@/assets/recipeadder.css';
 import { useAuth0 } from '@auth0/auth0-vue';
 import type { IngredientExport, IngredientImport } from '@/types/recipe';
 
-const searchItem = ref<string>('ingredients');
+const categoryWereSearchingIn = ref<string>('');
 
 const selectedIngredient = ref<IngredientExport | null>(null);
 const availableIngredients = ref<IngredientImport[]>([]);
@@ -81,7 +81,6 @@ async function loadIngredients(
       token = await getAccessTokenSilently({
         authorizationParams: {
           audience: API_AUDIENCE,
-          scope: 'read:ingredients'
         }
       });
     }

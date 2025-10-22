@@ -1,21 +1,21 @@
 <template>
 <input
   ref="myInput"
-  :placeholder="`Search ${searchItem}...`"
+  :placeholder="`Search ${categoryWereSearchingIn}...`"
   v-model="searchTerm"
 />
   <div class="item-picker"
-   v-if="isAvailableIngredientsListOpen"
-   @scroll.passive="loadIngredients(($event.currentTarget as HTMLElement)!.scrollTop, ($event.currentTarget as HTMLElement)!.clientHeight, ($event.currentTarget as HTMLElement)!.scrollHeight)">
-  <ul v-if="availableIngredients.length">
+   v-if="isAvailableItemListOpen "
+   @scroll.passive="loadRecipeItems(($event.currentTarget as HTMLElement)!.scrollTop, ($event.currentTarget as HTMLElement)!.clientHeight, ($event.currentTarget as HTMLElement)!.scrollHeight)">
+  <ul v-if="availableItems.length">
     <li
-      v-for="(ingredient, i) in availableIngredients"
+      v-for="(item, i) in availableItems"
       :key="i"
-      @click="emit('addIngredient', selectedIngredient = { id: ingredient.id, name: ingredient.name }) ; setInputFocus(); searchTerm = ''"
+      @click="emit('addIngredient', selectedItem = { id: item.id, name: item.name }) ; setInputFocus(); searchTerm = ''"
       class="list"
-      :class="{ 'selected-ingredients': props.selectedIds.has(ingredient.id) }"
+      :class="{ 'selected-items': props.selectedIds.has(item.id) }"
     >
-      {{ ingredient.name }}
+      {{ item.name }}
     </li>
   </ul>
 </div>
@@ -25,26 +25,20 @@
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import '@/assets/recipeadder.css';
-import { useAuth0 } from '@auth0/auth0-vue';
+import { useAuth0Service } from '@/services/auth0.service';
+
 import type { IngredientExport, IngredientImport } from '@/types/recipe';
 
-const searchItem = ref<string>('utensils');
-
-const selectedIngredient = ref<IngredientExport | null>(null);
-const availableIngredients = ref<IngredientImport[]>([]);
-const isAvailableIngredientsListOpen = ref<boolean>(false);
-const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+const selectedItem = ref<IngredientExport | null>(null);
+const availableItems = ref<IngredientImport[]>([]);
+const isAvailableItemListOpen = ref<boolean>(false);
 const myInput = ref<HTMLInputElement | null>(null);
-
 const emit = defineEmits<{(event: 'addIngredient', value: IngredientExport): void}>();
-const props = defineProps<{selectedIds: Set<string>}>()
-
-
+const props = defineProps<{selectedIds: Set<string>, categoryWereSearchingIn : 'ingredients' | 'appliances' | 'cookware' }>()
 const API_BASE = import.meta.env.VITE_API_SERVER_URL;
-const API_AUDIENCE = import.meta.env.VITE_AUTH0_AUDIENCE;
-
 const page = ref<number>(1);
 const searchTerm = ref<string>('');
+const { token, getToken } = useAuth0Service()
 
 function setInputFocus() {
   myInput.value?.focus();
@@ -52,39 +46,32 @@ function setInputFocus() {
 
 function toggleIngredientPicker() {
   if(searchTerm.value === ''){
-    isAvailableIngredientsListOpen.value = false;
+    isAvailableItemListOpen .value = false;
   }
   else {
-    isAvailableIngredientsListOpen.value = true;
+    isAvailableItemListOpen .value = true;
   }
 }
 
 watch(searchTerm, () => {
   toggleIngredientPicker();
   page.value = 1;
-  availableIngredients.value = [];
-  loadIngredients();
+  availableItems.value = [];
+  loadRecipeItems();
 })
 
 onMounted(() => {
-  loadIngredients();
+  getToken();
+  loadRecipeItems();
 });
 
-async function loadIngredients(
-  scrollTop?: number,
-  clientHeight?: number,
-  scrollHeight?: number
-) {
-  try {
-    let token: string | undefined;
-    if (isAuthenticated.value) {
-      token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: API_AUDIENCE,
-          scope: 'read:ingredients'
-        }
-      });
-    }
+async function loadRecipeItems<T, K>(
+    scrollTop?: number,
+    clientHeight?: number,
+    scrollHeight?: number
+  ){
+    try {
+    
 
     if (page.value === 1) {
       // first page, just load
@@ -95,7 +82,7 @@ async function loadIngredients(
     headers: { Authorization: token ? `Bearer ${token}` : undefined },
   }
       );
-      availableIngredients.value.push(...data);
+      availableItems.value.push(...data);
       page.value += 1;
     } else {
       const nearBottom =
@@ -113,7 +100,7 @@ async function loadIngredients(
     headers: { Authorization: token ? `Bearer ${token}` : undefined },
   }
 )
-        availableIngredients.value.push(...data);
+        availableItems.value.push(...data);
         page.value += 1;
     }
   } catch (e) {
@@ -121,5 +108,8 @@ async function loadIngredients(
   } finally {
     // no-op
   }
-}
+
+  }
+
+
 </script>

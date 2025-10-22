@@ -1,14 +1,14 @@
 <template>
     <div>
         <ul v-if="props.items.length">
-            <li v-for="(ingredient, index) in items" :key="index">
-                {{ ingredient.name }}
+            <li v-for="(item, index) in items" :key="index">
+                {{ item.name }}
 
                 <button 
                 type="button"
-                aria-label="Remove Ingredient"
+                aria-label="Remove Cookware"
                 @click="emit('remove', index)">
-                Remove Ingredient
+                Remove Cookware
                 </button>
             </li>
         </ul>
@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import type { IngredientExport } from '@/types/recipe';
+import type { CookwareExport } from '@/types/recipe';
 
 const emit = defineEmits<{(event: 'remove', index: number): void}>();
-const props = defineProps<{ items: IngredientExport[] }>();
+const props = defineProps<{ items: CookwareExport[] }>();
 </script>
