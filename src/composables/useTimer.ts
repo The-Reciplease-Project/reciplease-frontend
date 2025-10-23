@@ -1,7 +1,7 @@
 import { ref } from 'vue'
-import { useIngredientSteps } from './useIngredientSteps'
+import { useRecipeSteps } from './useIngredientSteps'
 
-const { steps } = useIngredientSteps()
+const { steps } = useRecipeSteps()
 
 export function useTimer() {
   

@@ -1,9 +1,11 @@
-import type { IngredientExport, StepExport} from "./recipe";
+import type { RecipeItemExport, RecipeStepExport} from "./recipe";
 
 export type CreateRecipeDto = {
     name: string;
-    ingredients: IngredientExport[];
-    steps: StepExport[];
+    ingredients: RecipeItemExport[];
+    cookware: RecipeItemExport[];
+    appliances: RecipeItemExport[];
+    steps: RecipeStepExport[];
 }
 
 

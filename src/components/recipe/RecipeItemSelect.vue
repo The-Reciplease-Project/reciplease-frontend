@@ -11,7 +11,7 @@
     <li
       v-for="(item, i) in availableItems"
       :key="i"
-      @click="emit('addIngredient', selectedItem = { id: item.id, name: item.name }) ; setInputFocus(); searchTerm = ''"
+      @click="emit('addItem', selectedItem = { id: item.id, name: item.name }, categoryWereSearchingIn) ; setInputFocus(); searchTerm = ''"
       class="list"
       :class="{ 'selected-items': props.selectedIds.has(item.id) }"
     >
@@ -26,15 +26,19 @@ import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import '@/assets/recipeadder.css';
 import { useAuth0Service } from '@/services/auth0.service';
+import type { Category } from  '@/composables/useIngredients';
 
-import type { IngredientExport, IngredientImport } from '@/types/recipe';
+import type { RecipeItemExport, RecipeItemImport } from '@/types/recipe';
 
-const selectedItem = ref<IngredientExport | null>(null);
-const availableItems = ref<IngredientImport[]>([]);
+const selectedItem = ref<RecipeItemExport | null>(null);
+const availableItems = ref<RecipeItemImport[]>([]);
 const isAvailableItemListOpen = ref<boolean>(false);
 const myInput = ref<HTMLInputElement | null>(null);
-const emit = defineEmits<{(event: 'addIngredient', value: IngredientExport): void}>();
-const props = defineProps<{selectedIds: Set<string>, categoryWereSearchingIn : 'ingredients' | 'appliances' | 'cookware' }>()
+const emit = defineEmits<{(event: 'addItem', value: RecipeItemExport, category: Category): void}>();
+const props = defineProps<{
+  selectedIds: Set<string>,
+  categoryWereSearchingIn : Category,
+   }>()
 const API_BASE = import.meta.env.VITE_API_SERVER_URL;
 const page = ref<number>(1);
 const searchTerm = ref<string>('');
@@ -61,7 +65,7 @@ watch(searchTerm, () => {
 })
 
 onMounted(() => {
-  getToken();
+  getToken()
   loadRecipeItems();
 });
 
@@ -72,11 +76,10 @@ async function loadRecipeItems<T, K>(
   ){
     try {
     
-
     if (page.value === 1) {
       // first page, just load
-      const { data } = await axios.get<IngredientImport[]>(
-  `${API_BASE}/ingredients`,
+      const { data } = await axios.get<RecipeItemImport[]>(
+  `${API_BASE}/${props.categoryWereSearchingIn}`,
   {
     params: { q: searchTerm.value, page: page.value },     // ✅ let axios encode it
     headers: { Authorization: token ? `Bearer ${token}` : undefined },
@@ -93,7 +96,7 @@ async function loadRecipeItems<T, K>(
 
       if (!nearBottom) return;
 
-      const { data } = await axios.get<IngredientImport[]>(
+      const { data } = await axios.get<RecipeItemImport[]>(
   `${API_BASE}/ingredients`,
   {
     params: { q: searchTerm.value, page: page.value },     // ✅ let axios encode it

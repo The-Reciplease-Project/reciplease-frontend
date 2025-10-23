@@ -1,7 +1,7 @@
 import { ref } from 'vue'  
 import type { RecipeStepExport } from '@/types/recipe'
 
-export function useIngredientSteps() {
+export function useRecipeSteps() {
     const steps = ref<RecipeStepExport[]>([])
 
     function addStep() {

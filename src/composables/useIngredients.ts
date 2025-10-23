@@ -1,25 +1,39 @@
 import { ref }  from 'vue';
-import type { IngredientImport, IngredientExport } from '@/types/recipe';
+import type { RecipeItemImport, RecipeItemExport } from '@/types/recipe';
+export type Category = 'ingredients' | 'appliances' | 'cookware'
 
-export function useIngredients(){
-    const items = ref<IngredientExport[]>([]);
+export function useRecipeSelector(){
+
+
     const ids = ref<Set<string>>(new Set());
 
-    function add(item: IngredientExport){
+    type ItemsByCategory = {
+        ingredients: RecipeItemExport[],
+        appliances: RecipeItemExport[],
+        cookware: RecipeItemExport[],
+    }
+
+    const items = ref<ItemsByCategory>({
+        ingredients: [],
+        appliances: [],
+        cookware: [],
+    })
+
+    function add(item: RecipeItemExport, category: Category){
         if(item && !ids.value.has(item.id)){
-            items.value.push(item);
+            items.value[category].push(item);
             ids.value.add(item.id);
         }
     }
 
-    function removeAt(index: number){
-        if(index < 0 || index >= items.value.length) return;
-        ids.value.delete(items.value[index].id);
-        items.value.splice(index, 1);
+    function removeAt(index: number, category: Category){
+        if(index < 0 || index >= items.value[category].length) return;
+        ids.value.delete(items.value[category][index].id);
+        items.value[category].splice(index, 1);
     }
 
-    function clear(){
-        items.value = [];
+    function clear(category: Category){
+        items.value[category] = [];
         ids.value.clear();
     }
 
@@ -28,6 +42,7 @@ export function useIngredients(){
         add,
         removeAt,
         clear,
-        ids
+        ids,
+        
     }
 }

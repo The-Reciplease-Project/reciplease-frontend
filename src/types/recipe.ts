@@ -1,6 +1,6 @@
 export type Recipe = {
   name: string
-  ingredients: IngredientExport[]
+  ingredients: RecipeItemExport[]
 }
 
 export type RecipeStepExport = {
@@ -11,66 +11,21 @@ export type RecipeStepExport = {
   recipe: number
 }
 
-export type IngredientImport = {
-  id: string,
+export type RecipeItemImport = {
+  id: string
   name: string
 }
 
-export type IngredientExport = {
+export type RecipeItemExport = {
   id: string
   name: string
   quantity?: number
-  unit?: string // e.g., "g", "cup", "tbsp"
-}
-
-export type CookwareImport = {
-  id: string,
-  name: string,
-  size: number,
-}
-
-export type CookwareExport = {
-  id: string,
-  name: string,
-  size: number,
-}
-
-export type ApplianceImport = {
-  id: string,
-  name: string
-}
-
-export type ApplianceExport = {
-  id: string,
-  name: string
+  unit?: string
 }
 
 export type StepImport = {
 
 }
 
-export type Cookware = {
-  name: string
-  size?: string // e.g., "10 in", "3 qt"
-  // Potentially add: alternatives?: Cookware[]
-}
-
-export type Appliance = {
-  name: string
-  // Potentially add: alternatives?: Appliance[]
-}
-
-export type Utensil = {
-  name: string
-  // Placeholder for utensil details if needed later
-}
-
-
-
-export type SubStep = {
-  description: string
-  time: number
-  // Consider making time a duration type (e.g., ISO 8601) if not plain int
-}
 
 

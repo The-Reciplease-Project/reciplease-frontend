@@ -6,18 +6,14 @@
     </form>
 
     <section>
-      <h3 class="thing">Ingredients</h3>
-      <div class="thing">
-        <IngredientSelect @addIngredient="addIngredient" :selectedIds="selectedIds" />
-      </div>
-      <div class="thing">
-        <IngredientList :items="ingredients" @remove="removeIngredient" />
-      </div>
+      <RecipeItemSelect category-were-searching-in="ingredients" :selected-ids="selectedIds('ingredients')" @add-item="add"/>
+      <RecipeItemList :items="items['ingredients']" recipe-item-type="ingredients" @remove="removeAt"  />
 
-      <RecipeItemSelect
-      category-were-searching-in="ingredients"
-      :selectedIds="selectedIds"
-      />
+      <RecipeItemSelect category-were-searching-in="cookware" :selected-ids="selectedIds('cookware')" @add-item="add"/>
+      <RecipeItemList :items="items['cookware']" recipe-item-type="cookware" @remove="removeAt"  />
+
+      <RecipeItemSelect category-were-searching-in="appliances" :selected-ids="selectedIds('appliances')" @add-item="add"/>
+      <RecipeItemList :items="items['appliances']" recipe-item-type="appliances" @remove="removeAt"/>
 
       <RecipeTimer 
       :time="time" 
@@ -40,23 +36,25 @@
 import { ref, computed } from 'vue';
 import '@/assets/main.css';
 import RecipeNameField from './recipe/RecipeNameField.vue';
-import IngredientList from '../components/recipe/IngredientList.vue';
-import IngredientSelect from '../components/recipe/IngredientSelect.vue';
 import RecipeSteps from '../components/recipe/RecipeSteps.vue';
 import RecipeItemSelect from './recipe/RecipeItemSelect.vue';
-import { useIngredients } from '@/composables/useIngredients';
+import RecipeItemList from './recipe/RecipeItemList.vue';
+import { useRecipeSelector, type Category } from '@/composables/useIngredients';
 import { useRecipeService } from '@/services/recipe.service';
 import RecipeTimer from '../components/recipe/RecipeTimer.vue';
 import { useTimer} from '@/composables/useTimer';
-import { useIngredientSteps } from '@/composables/useIngredientSteps';
+import { useRecipeSteps } from '@/composables/useIngredientSteps';
 
 const { time, startTimer, stopTimer, resetTimer } = useTimer();
-const { addStep, steps, startStep, endStep } = useIngredientSteps();
+const { addStep, steps, startStep, endStep } = useRecipeSteps();
 const { createRecipe } = useRecipeService();
 const recipeName = ref<string>('');
 const isSubmitting = ref<boolean>(false);
-const { items: ingredients, add: addIngredient, removeAt: removeIngredient, clear } = useIngredients();
-const selectedIds = computed(() => new Set(ingredients.value.map(i => i.id)));
+
+
+
+const { items, add, removeAt, clear } = useRecipeSelector();
+const selectedIds = (category: Category) => new Set(items.value[category].map(i => i.name))
 
 defineEmits<({ event: 'timerStarted', time: number })>();
 
@@ -64,10 +62,8 @@ async function submitRecipe() {
   if (!recipeName.value.trim()) return 
   isSubmitting.value = true
   try {
-    const dto = { name: recipeName.value.trim(), ingredients: ingredients.value, steps: steps.value }
+    const dto = { name: recipeName.value.trim(), ingredients: items.value['ingredients'], cookware: items.value['cookware'], appliances: items.value['appliances'],  steps: steps.value }
     const saved = await createRecipe(dto)
-    recipeName.value = ''
-    clear()
   } catch (err) {
     console.error('Failed to create recipe', err)
   } finally {
