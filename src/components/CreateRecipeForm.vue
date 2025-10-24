@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent="submitRecipe">
-        <!-- <RecipeNameField @update:model-value="childRecipeName => recipeName = childRecipeName"/> -->
-          <RecipeTitleField />
+        <RecipeNameField @update:model-value="childRecipeName => recipeName = childRecipeName"/>
+      
     </form>
 
     <section>

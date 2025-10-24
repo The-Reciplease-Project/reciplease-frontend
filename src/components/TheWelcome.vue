@@ -9,7 +9,7 @@ import { useUserInfo } from '@/services/userinfo.service'
 import type { UserInfo } from '@/types/user';
 
 const { isAuthenticated, isLoading } = useAuth0()
-const { getUserInfo } = useUserInfo();
+const { getUserInfo, ensureUserInBackend } = useUserInfo();
 const me = ref<UserInfo | null>(null);
 
 

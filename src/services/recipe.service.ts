@@ -4,12 +4,13 @@ import { useAuth0 } from '@auth0/auth0-vue'
 import type { CreateRecipeDto } from '@/types/recipeDto'
 
 export function useRecipeService() {
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0()
-
-  const API_BASE     = import.meta.env.VITE_API_SERVER_URL
-  const API_AUDIENCE = import.meta.env.VITE_AUTH0_AUDIENCE   
+    
 
   async function createRecipe(dto: CreateRecipeDto) {
+    const { getAccessTokenSilently, isAuthenticated } = useAuth0()
+
+  const API_BASE     = import.meta.env.VITE_API_SERVER_URL
+  const API_AUDIENCE = import.meta.env.VITE_AUTH0_AUDIENCE 
     if (!isAuthenticated.value) {
       throw new Error('Not authenticated')
     }

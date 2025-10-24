@@ -10,7 +10,7 @@ const { ensureUserInBackend } = useUserInfo();
 
 watch([isAuthenticated, isLoading], async ([auth, loading]) => {
   if (!loading && auth) {
-    await ensureUserInBackend(); // <-- calls your backend to upsert by sub
+    await ensureUserInBackend();
   }
 }, { immediate: true });
 
