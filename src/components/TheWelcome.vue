@@ -1,35 +1,29 @@
 <script setup lang="ts">
 
-import { useAuth0 } from '@auth0/auth0-vue'
+import { useAuth0, User } from '@auth0/auth0-vue'
 import LoginButton from './home/LoginButton.vue'
 import SignupButton from './home/SignupButton.vue'
 import LogoutButton from './home/LogoutButton.vue'
-import CreateRecipe from './CreateRecipe.vue'
-import { ref } from "vue";
-
-const { isAuthenticated, isLoading } = useAuth0()
-const errorMsg = ref<string | null>(null);
-
-
-console.log("Authentication:", isAuthenticated.value);
-
-
-
+import { ref, onMounted } from "vue";
 import { useUserInfo } from '@/services/userinfo.service'
 import type { UserInfo } from '@/types/user';
 
+const { isAuthenticated, isLoading } = useAuth0()
 const { getUserInfo } = useUserInfo();
 const me = ref<UserInfo | null>(null);
-const rate = ref<any>(null);
-const err = ref<string | null>(null);
 
-async function loadMe() {
+
+onMounted(() => {
+  loadUser();
+}) 
+
+
+async function loadUser() {
   try {
-    const { profile, rateLimit } = await getUserInfo();
+    const { profile } = await getUserInfo();
     me.value = profile;
-    rate.value = rateLimit;
   } catch (e: any) {
-    err.value = e?.message ?? "Failed to load user info";
+    console.log("Failed to load user info");
   }
 }
 </script>
@@ -51,7 +45,5 @@ async function loadMe() {
 </template>
 
 <style scoped>
-.thing{
-  display: block;
-}
+
 </style>

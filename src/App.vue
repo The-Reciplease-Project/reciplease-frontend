@@ -18,8 +18,6 @@ watch([isAuthenticated, isLoading], async ([auth, loading]) => {
 
 <template>
   <RouterView />
-
-
 </template>
 
 <style scoped>

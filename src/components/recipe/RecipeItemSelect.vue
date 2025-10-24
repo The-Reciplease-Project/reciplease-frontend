@@ -42,7 +42,7 @@ const props = defineProps<{
 const API_BASE = import.meta.env.VITE_API_SERVER_URL;
 const page = ref<number>(1);
 const searchTerm = ref<string>('');
-const { token, getToken } = useAuth0Service()
+const { getToken } = useAuth0Service()
 
 function setInputFocus() {
   myInput.value?.focus();
@@ -75,13 +75,13 @@ async function loadRecipeItems<T, K>(
     scrollHeight?: number
   ){
     try {
-    
+    const token = await getToken();
     if (page.value === 1) {
       // first page, just load
       const { data } = await axios.get<RecipeItemImport[]>(
   `${API_BASE}/${props.categoryWereSearchingIn}`,
   {
-    params: { q: searchTerm.value, page: page.value },     // ✅ let axios encode it
+    params: { q: searchTerm.value, page: page.value }, 
     headers: { Authorization: token ? `Bearer ${token}` : undefined },
   }
       );

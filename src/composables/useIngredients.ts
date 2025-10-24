@@ -1,9 +1,8 @@
 import { ref }  from 'vue';
-import type { RecipeItemImport, RecipeItemExport } from '@/types/recipe';
+import type { RecipeItemExport } from '@/types/recipe';
 export type Category = 'ingredients' | 'appliances' | 'cookware'
 
-export function useRecipeSelector(){
-
+export function useRecipeItemSelector(){
 
     const ids = ref<Set<string>>(new Set());
 
