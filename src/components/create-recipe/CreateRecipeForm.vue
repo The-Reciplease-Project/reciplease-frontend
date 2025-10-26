@@ -8,12 +8,16 @@
     </form>
 
     <section>
-      <RecipeItemSelect category-were-searching-in="ingredients" :selected-ids="selectedIds('ingredients')" @add-item="add"/>
+      
       <RecipeItemList :items="items['ingredients']" recipe-item-type="ingredients" @remove="removeAt"  />
-      <RecipeItemSelect category-were-searching-in="cookware" :selected-ids="selectedIds('cookware')" @add-item="add"/>
+      <RecipeItemSelect category-were-searching-in="ingredients" :selected-ids="selectedIds('ingredients')" @add-item="add"/>
+      
       <RecipeItemList :items="items['cookware']" recipe-item-type="cookware" @remove="removeAt"  />
-      <RecipeItemSelect category-were-searching-in="appliances" :selected-ids="selectedIds('appliances')" @add-item="add"/>
+      <RecipeItemSelect category-were-searching-in="cookware" :selected-ids="selectedIds('cookware')" @add-item="add"/>
+      
       <RecipeItemList :items="items['appliances']" recipe-item-type="appliances" @remove="removeAt"/>
+      <RecipeItemSelect category-were-searching-in="appliances" :selected-ids="selectedIds('appliances')" @add-item="add"/>
+      
       <RecipeTimer :time="time" @startedTimer="startTimer" @stoppedTimer="stopTimer" @resetTimer="resetTimer" />
       <RecipeSteps 
       :steps="steps" 
@@ -28,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import '@/assets/main.css';
 import RecipeNameField from './RecipeNameField.vue';
 import RecipeSteps from './RecipeSteps.vue';
@@ -42,21 +46,30 @@ import { useRecipeSteps } from '@/composables/create-recipe/useIngredientSteps';
 
 const { time, startTimer, stopTimer, resetTimer } = useTimer();
 const { addStep, steps, startStep, endStep, changeDescStepField  } = useRecipeSteps();
-const { createRecipe } = useRecipeService();
 const recipeName = ref<string>('');
 const isSubmitting = ref<boolean>(false);
 const { items, add, removeAt, clear } = useRecipeItemSelector();
 const selectedIds = (category: Category) => new Set(items.value[category].map(i => i.name))
 
 defineEmits<({ event: 'timerStarted', time: number })>();
+import { useAuth0Service } from '@/services/auth0.service';
+  const { getToken } = useAuth0Service()
+
+  onMounted(() => {
+  getToken()
+
+});
 
 
 async function submitRecipe() {
+  const { createRecipe } = useRecipeService();
+
+  let token = await getToken();
   if (!recipeName.value.trim()) return 
   isSubmitting.value = true
   try {
     const dto = { name: recipeName.value.trim(), ingredients: items.value['ingredients'], cookware: items.value['cookware'], appliances: items.value['appliances'],  steps: steps.value }
-    const saved = await createRecipe(dto)
+    const saved = await createRecipe(dto, token)
   } catch (err) {
     console.error('Failed to create recipe', err)
   } finally {
