@@ -31,8 +31,8 @@ export function useTimer() {
     stopTimer()
     time.value = 0
     for (const step of steps.value) {
-      step.startTime = 0
-      step.endTime = 0
+      step.beginStep = 0
+      step.finishStep = 0
     }
   }
 

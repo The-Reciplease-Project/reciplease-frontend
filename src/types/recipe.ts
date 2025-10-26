@@ -6,9 +6,8 @@ export type Recipe = {
 export type RecipeStepExport = {
   id?: string  
   description: string;
-  startTime: number | null;
-  endTime: number | null;
-  recipe: number
+  beginStep: number | null;
+  finishStep: number | null;
   disableDescription? : boolean
 }
 

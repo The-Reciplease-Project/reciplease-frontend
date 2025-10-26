@@ -7,9 +7,8 @@ export function useRecipeSteps() {
     function addStep() {
       steps.value.push({
       description: '',
-      startTime: null,
-      endTime: null,
-      recipe: 0,
+      beginStep: null,
+      finishStep: null,
       disableDescription: false,
     })
   }
@@ -18,13 +17,13 @@ export function useRecipeSteps() {
   function startStep(i: number, time: number) {
     const s = steps.value[i]
     if (!s) return
-    s.startTime = time
+    s.beginStep = time
   }
 
   function endStep(i: number, time: number) {
     const s = steps.value[i]
     if (!s) return
-    s.endTime = time
+    s.finishStep = time
   }
 
   function changeDescStepField(i : number) {
