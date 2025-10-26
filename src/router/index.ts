@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: '/add-recipe',
       name: 'add-recipe',
-      component: () => import('../components/CreateRecipeForm.vue')
+      component: () => import('../components/create-recipe/CreateRecipeForm.vue')
     },
   ],
 })

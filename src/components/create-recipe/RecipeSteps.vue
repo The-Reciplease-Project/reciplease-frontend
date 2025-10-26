@@ -4,7 +4,11 @@
     <div>
         <ul >
             <ol v-for="(step, index) in steps" :key="index">
-                <textarea v-model="step.description" placeholder="Enter step description" ></textarea>
+                <textarea v-model="step.description" 
+                placeholder="Enter step description"
+                @input="emit('inputSomething', index)"
+                :maxlength="150"></textarea>
+                <small v-if="step.disableDescription"> Please keep your descriptions concise! </small>
                 <div v-if="step.startTime === null">
                     <button  @click="emit('startedStep', index)">Begin Step</button>
                 </div>
@@ -25,14 +29,9 @@
 
 <script setup lang="ts">
 import type { RecipeStepExport } from '@/types/recipe';
-import { useTimer } from '@/composables/useTimer';
+import { useTimer } from '@/composables/create-recipe/useTimer';
 const { convertTimeFromSeconds } = useTimer();
-
-
-
-
-
-const emit = defineEmits<{(e: 'startedStep', index: number): void, (e: 'endedStep', index: number): void, (e: 'addedStep'): void}>();
+const emit = defineEmits<{(e: 'startedStep', index: number,): void, (e: 'inputSomething', index: number,): void, (e: 'endedStep', index: number): void, (e: 'addedStep'): void}>();
 const props = defineProps<{ steps: RecipeStepExport[], time: number }>();
 
 </script>

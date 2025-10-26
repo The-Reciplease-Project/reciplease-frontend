@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTimer} from '@/composables/useTimer';
+import { useTimer} from '@/composables/create-recipe/useTimer';
 const { convertTimeFromSeconds } = useTimer();
 
 import { defineEmits } from 'vue';

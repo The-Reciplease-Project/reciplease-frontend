@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
 import { useAuth0, User } from '@auth0/auth0-vue'
-import LoginButton from './home/LoginButton.vue'
-import SignupButton from './home/SignupButton.vue'
-import LogoutButton from './home/LogoutButton.vue'
+import LoginButton from './LoginButton.vue'
+import SignupButton from './SignupButton.vue'
+import LogoutButton from './LogoutButton.vue'
 import { ref, onMounted } from "vue";
 import { useUserInfo } from '@/services/userinfo.service'
 import type { UserInfo } from '@/types/user';
 
 const { isAuthenticated, isLoading } = useAuth0()
-const { getUserInfo, ensureUserInBackend } = useUserInfo();
+const { getUserInfo } = useUserInfo();
 const me = ref<UserInfo | null>(null);
 
 

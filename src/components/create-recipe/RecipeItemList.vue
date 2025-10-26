@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import type { RecipeItemExport } from '@/types/recipe'
-import type { Category } from  '@/composables/useIngredients';
+import type { Category } from  '@/composables/create-recipe/useIngredients';
 const emit = defineEmits<{ (event: 'remove', index: number, category: Category): void }>()
 const props = defineProps<{
   items: RecipeItemExport[]

@@ -1,6 +1,9 @@
 <template>
     <form @submit.prevent="submitRecipe">
-        <RecipeNameField @update:model-value="childRecipeName => recipeName = childRecipeName"/>
+        <RecipeNameField @update:model-value="childRecipeName => recipeName = childRecipeName"
+          :required=true
+          :length=recipeName.length
+          />
       
     </form>
 
@@ -12,7 +15,14 @@
       <RecipeItemSelect category-were-searching-in="appliances" :selected-ids="selectedIds('appliances')" @add-item="add"/>
       <RecipeItemList :items="items['appliances']" recipe-item-type="appliances" @remove="removeAt"/>
       <RecipeTimer :time="time" @startedTimer="startTimer" @stoppedTimer="stopTimer" @resetTimer="resetTimer" />
-      <RecipeSteps :steps="steps" :time="time" @started-step="(i) => startStep(i,time)" @ended-step="(i) => endStep(i,time)" @added-step="() => addStep()"/>
+      <RecipeSteps 
+      :steps="steps" 
+      :time="time" 
+      @started-step="(i) => startStep(i,time)" 
+      @ended-step="(i) => endStep(i,time)" 
+      @added-step="() => addStep()"
+      @input-something="(i) => changeDescStepField(i)"
+      />
     </section>
     <button class="thing" @click="submitRecipe" :disabled="isSubmitting"> Save Recipe </button>
 </template>
@@ -20,18 +30,18 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import '@/assets/main.css';
-import RecipeNameField from './recipe/RecipeNameField.vue';
-import RecipeSteps from '../components/recipe/RecipeSteps.vue';
-import RecipeItemSelect from './recipe/RecipeItemSelect.vue';
-import RecipeItemList from './recipe/RecipeItemList.vue';
-import { useRecipeItemSelector, type Category } from '@/composables/useIngredients';
+import RecipeNameField from './RecipeNameField.vue';
+import RecipeSteps from './RecipeSteps.vue';
+import RecipeItemSelect from './RecipeItemSelect.vue';
+import RecipeItemList from './RecipeItemList.vue';
+import { useRecipeItemSelector, type Category } from '@/composables/create-recipe/useIngredients';
 import { useRecipeService } from '@/services/recipe.service';
-import RecipeTimer from '../components/recipe/RecipeTimer.vue';
-import { useTimer} from '@/composables/useTimer';
-import { useRecipeSteps } from '@/composables/useIngredientSteps';
+import RecipeTimer from './RecipeTimer.vue';
+import { useTimer} from '@/composables/create-recipe/useTimer';
+import { useRecipeSteps } from '@/composables/create-recipe/useIngredientSteps';
 
 const { time, startTimer, stopTimer, resetTimer } = useTimer();
-const { addStep, steps, startStep, endStep } = useRecipeSteps();
+const { addStep, steps, startStep, endStep, changeDescStepField  } = useRecipeSteps();
 const { createRecipe } = useRecipeService();
 const recipeName = ref<string>('');
 const isSubmitting = ref<boolean>(false);

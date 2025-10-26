@@ -26,7 +26,7 @@ import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import '@/assets/recipeadder.css';
 import { useAuth0Service } from '@/services/auth0.service';
-import type { Category } from  '@/composables/useIngredients';
+import type { Category } from  '@/composables/create-recipe/useIngredients';
 
 import type { RecipeItemExport, RecipeItemImport } from '@/types/recipe';
 

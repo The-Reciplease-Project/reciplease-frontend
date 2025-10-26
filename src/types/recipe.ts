@@ -9,6 +9,7 @@ export type RecipeStepExport = {
   startTime: number | null;
   endTime: number | null;
   recipe: number
+  disableDescription? : boolean
 }
 
 export type RecipeItemImport = {
