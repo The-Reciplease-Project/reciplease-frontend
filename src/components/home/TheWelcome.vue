@@ -41,6 +41,7 @@ async function loadUser() {
     <template v-else>
       <LoginButton  />
       <SignupButton />
+      <p> Deploy </p>
     </template>
   </div>
 </template>
