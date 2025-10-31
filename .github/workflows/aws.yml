@@ -7,8 +7,8 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: reciplease
-  ECS_SERVICE: reciplease-service-60wis2dg
-  ECS_CLUSTER: able-turtle-wg8h4g
+  ECS_SERVICE: reciplease-service-otnfneq2
+  ECS_CLUSTER: outstanding-bear-v6vep1
   ECS_TASK_DEFINITION: .github/workflows/task-definition.json
   CONTAINER_NAME: reciplease-frontend
 
