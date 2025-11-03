@@ -34,3 +34,23 @@ playwright-report/
 
 # Environment variables
 .env
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+terraform.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform Keys & creds
+*.pem
+*.key
+*.pfx
+*.p12
+.aws/
+

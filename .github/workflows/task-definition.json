@@ -2,11 +2,10 @@
     "family": "reciplease",
     "containerDefinitions": [
         {
-            "cpu": 512,
+            "cpu": 410,
             "environment": [],
-            "environmentFiles": [],
             "essential": true,
-            "image": "448049819404.dkr.ecr.us-east-1.amazonaws.com/reciplease@sha256:703e5415d45dd19c0b9af748ab0c3eb6bcae517400bc4c3f660cbc51965f2d1d",
+            "image": "448049819404.dkr.ecr.us-east-1.amazonaws.com/reciplease:19d238cc3f50c4ad190ff94de0e1ef7526897472",
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
@@ -31,7 +30,6 @@
                 }
             ],
             "systemControls": [],
-            "ulimits": [],
             "volumesFrom": []
         }
     ],
@@ -42,7 +40,7 @@
     "requiresCompatibilities": [
         "EC2"
     ],
-    "cpu": "1024",
+    "cpu": "512",
     "memory": "717",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
