@@ -42,6 +42,7 @@ async function loadUser() {
       <LoginButton  />
       <SignupButton />
       <p> Deploy </p>
+      <p> Deploy 1 </p>
     </template>
   </div>
 </template>
